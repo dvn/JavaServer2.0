@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.apache.log4j.Level;
 
 public class SwordAPIEndpoint
 {
@@ -101,6 +102,7 @@ public class SwordAPIEndpoint
 			throws SwordAuthException
 	{
 		// we have an authentication header, so parse it
+		log.info("encodedHeader:<<<" + encodedHeader + ">>>");
 		String[] authBits = encodedHeader.split(" ");
 
 		// Auth header doesn't have 2 parts (Basic, [base 64 username/password])?
@@ -145,6 +147,7 @@ public class SwordAPIEndpoint
 	protected void storeAndCheckBinary(Deposit deposit, SwordConfiguration config)
 			throws SwordServerException, SwordError
 	{
+		log.setLevel(Level.DEBUG);
 		// we require an input stream for this to work
 		if (deposit.getInputStream() == null)
 		{
@@ -153,13 +156,16 @@ public class SwordAPIEndpoint
 
 		if (!config.storeAndCheckBinary())
 		{
-			return;
+			log.info("skipping early return from storeAndCheckBinary config check (for now)");
+//			return;
 		}
 
 		String tempDirectory = config.getTempDirectory();
 		if (tempDirectory == null)
 		{
-			throw new SwordServerException("Store and Check operation requested, but no tempDirectory specified in config");
+//			throw new SwordServerException("Store and Check operation requested, but no tempDirectory specified in config");
+			tempDirectory = "/tmp";
+			log.info("manually setting tempDirectory to " + tempDirectory + " (for now)");
 		}
 
 		String filename = tempDirectory + File.separator + "SWORD-" + UUID.randomUUID().toString();

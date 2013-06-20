@@ -229,7 +229,8 @@ public class CollectionAPI extends SwordAPIEndpoint
 		finally
 		{
 			// get rid of any temp files used
-			this.cleanup(deposit);
+			log.info("skipping cleanup of " + deposit.getFilename() + " (for now)");
+//			this.cleanup(deposit);
 		}
     }
 	protected void addGenerator(DepositReceipt doc, SwordConfiguration config)
